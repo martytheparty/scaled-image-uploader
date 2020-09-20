@@ -18,3 +18,4 @@ I am going to go with a client side solution for the following reasons:
 * the main disadvantage is that while it gives editors more control is also adds work.
 
 Step 1.  Show a scaled down large image in a canvas tag.
+Step 2.  Upload the image to a server.
