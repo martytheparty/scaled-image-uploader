@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone In Canvas</title>
+    <style>
+        canvas {
+            border: 1px solid black
+        }
+    </style>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <td>Original (<span id='od'></span>)</td>
+            <td>Canvas (<span id='cd'></span>)</td>
+        </tr>
+        <tr>
+            <td>
+                <img src="big-photo.jpg" alt="Original Phone" width="300">
+            </td>
+            <td>
+                <canvas></canvas>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        // render a canvas tag that has the same aspect ratio as the image
+
+        const imageEle = document.querySelector('img');
+        const canvasEle = document.querySelector('canvas');
+        const origDimsEle = document.getElementById('od');
+        const canvasDimsEle = document.getElementById('cd');
+        imageEle.onload = () => {
+            canvasEle.width = imageEle.width;
+            canvasEle.height = imageEle.height;
+            const ctx = canvasEle.getContext("2d");
+            ctx.drawImage(imageEle, 0, 0, canvasEle.width, canvasEle.height);
+            origDimsEle.innerHTML = `${imageEle.naturalWidth}x${imageEle.naturalHeight}`;
+            canvasDimsEle.innerHTML = `${imageEle.width}x${imageEle.height}`;
+        }
+
+
+    </script>
+    
+</body>
+</html>
