@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Canvas Image To Server</title>
+    <style>
+        canvas {
+            border: 1px solid black
+        }
+    </style>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <td>Original (<span id='od'></span>)</td>
+            <td>Canvas (<span id='cd'></span>)  <button>upload</button></td>
+        </tr>
+        <tr>
+            <td>
+                <img src="big-photo.jpg" alt="Original Phone" width="300">
+            </td>
+            <td>
+                <canvas></canvas>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        // render a canvas tag that has the same aspect ratio as the image
+        const button = document.querySelector('button');
+        const imageEle = document.querySelector('img');
+        const canvasEle = document.querySelector('canvas');
+        const ctx = canvasEle.getContext("2d");
+        const origDimsEle = document.getElementById('od');
+        const canvasDimsEle = document.getElementById('cd');
+        imageEle.onload = () => {
+            canvasEle.width = imageEle.width;
+            canvasEle.height = imageEle.height;
+
+            ctx.drawImage(imageEle, 0, 0, canvasEle.width, canvasEle.height);
+            origDimsEle.innerHTML = `${imageEle.naturalWidth}x${imageEle.naturalHeight}`;
+            canvasDimsEle.innerHTML = `${imageEle.width}x${imageEle.height}`;
+        }
+
+
+
+    </script>
+
+
+note: this is an excellent thread on stack overflow https://stackoverflow.com/questions/19032406/convert-html5-canvas-into-file-to-be-uploaded 
+
+    <script>
+
+
+        
+    function postCanvasToURL() {
+        // Convert canvas image to Base64
+        var img = canvasEle.toDataURL();
+        // Convert Base64 image to binary
+        //var file = dataURItoBlob(img);
+        canvasEle.toBlob(
+            (blob) => {
+                console.log(blob);
+                const data = new FormData();
+                data.append('media', blob, 'img.png');
+                fetch('/', {
+                    method: 'post',
+                    body: data
+                });
+            }
+        );
+        
+
+    }
+
+    function dataURItoBlob(dataURI) {
+        // convert base64/URLEncoded data component to raw binary data held in a string
+        let byteString;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(dataURI.split(',')[1]);
+        else
+            byteString = unescape(dataURI.split(',')[1]);
+            // separate out the mime component
+            let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            // write the bytes of the string to a typed array
+            let ia = new Uint8Array(byteString.length);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ia], {type:mimeString});
+        }
+
+        button.onclick = postCanvasToURL;
+    </script>
+    
+</body>
+</html>
